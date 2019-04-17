@@ -7,13 +7,12 @@ using WeatherForecast.Application.ViewModels;
 
 namespace WeatherForecast.Application.AutoMapper
 {
-    public class WeatherDayViewModelProfile : Profile
+    public class ForecastViewModelProfile : Profile
     {
-        public WeatherDayViewModelProfile()
+        public ForecastViewModelProfile()
         {
             CreateMap<Forecast, ForecastViewModel>()
-                .ForMember(dest => dest.Days, opts => opts.MapFrom<ForecastDaysResolver>())
-                .ForAllOtherMembers(opts => opts.Ignore());
+                .ForMember(dest => dest.Days, opts => opts.MapFrom<ForecastDaysResolver>());
 
             CreateMap<Forecast, ForecastDayViewModel>().ForAllMembers(opts => opts.Ignore());
         }
