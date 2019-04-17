@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <PackageReference Include="Refit" Version="4.6.107" />
   </ItemGroup>
 
 </Project>

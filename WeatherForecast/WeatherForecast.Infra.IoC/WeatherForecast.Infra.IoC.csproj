@@ -4,4 +4,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.9.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OpenWeathermapApiClient\OpenWeathermapApiClient.csproj" />
+    <ProjectReference Include="..\WeatherForecast.Application\WeatherForecast.Application.csproj" />
+  </ItemGroup>
+
 </Project>
