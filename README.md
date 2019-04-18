@@ -6,7 +6,7 @@ This app allowes you to search for a 5 day weather foreacast by given eaither ci
 
 ![Home Page](Screenshots/1.PNG "Home Page")
 
-![Forecast](Screenshots/1.PNG "Forecast")
+![Forecast](Screenshots/2.PNG "Forecast")
 
 ![Responsive](Screenshots/3.PNG "Responsive")
 
