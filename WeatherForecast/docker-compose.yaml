@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  weather:
+    image: weather:latest
+    build:
+      context: .
+      dockerfile: ./WeatherForecast.Web/Dockerfile
+    ports:
+      - 8080:80

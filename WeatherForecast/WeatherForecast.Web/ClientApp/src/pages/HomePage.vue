@@ -62,4 +62,10 @@ export default {
 .HomePage__SearchInput {
   max-width: 90%;
 }
+
+.HomePage__SearchInput .multiselect__single {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 </style>

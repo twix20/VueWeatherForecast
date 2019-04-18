@@ -4,13 +4,10 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenWeatherMapApiClient;
-using Refit;
 using Swashbuckle.AspNetCore.Swagger;
 using WeatherForecast.Infra.IoC;
 
@@ -38,12 +35,11 @@ namespace WeatherForecast.Web
             var openWeatherMapApiUrl = new Uri(Configuration["OpenWeatherMapApi:Url"]);
             var openWeatherMapApiKey = Configuration["OpenWeatherMapApi:ApiKey"];
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options => { options.Filters.Add(new ApiExceptionFilterAttribute()); }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
-                configuration.RootPath = "ClientApp/build";
+                configuration.RootPath = "ClientApp/dist";
             });
 
             services.AddSwaggerGen(c =>
@@ -110,11 +106,6 @@ namespace WeatherForecast.Web
             app.UseSpa(spa =>
             {
                 spa.Options.SourcePath = "ClientApp";
-
-                if (env.IsDevelopment())
-                {
-                    //spa.UseReactDevelopmentServer(npmScript: "start");
-                }
             });
         }
     }
