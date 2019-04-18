@@ -1,16 +1,49 @@
 <template>
-  <div class="HomePage">
-    <WeatherForecastCard/>
+  <div>
+    <Navbar/>
+
+    <div class="HomePage mt-2">
+      <b-container>
+        <div class="mb-2 HomePage__SearchInputContainer">
+          <SearchWeatherInput class="HomePage__SearchInput"/>
+        </div>
+        <div v-if="forecast !== null">
+          <WeatherForecastCard :forecast="forecast" :loadingForecast="loadingForecast"/>
+        </div>
+        <div v-else-if="loadingForecast">
+          <b-spinner variant="primary" type="grow" label="Spinning"></b-spinner>
+        </div>
+        <div v-else>
+          <b-jumbotron
+            header="Weather Forecast"
+            lead="Start searching by using search engine above!"
+          ></b-jumbotron>
+        </div>
+      </b-container>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import Navbar from "@/components/Navbar";
 import WeatherForecastCard from "@/components/WeatherForecastCard/WeatherForecastCard";
+import SearchWeatherInput from "@/components/SearchWeatherInput";
 
 export default {
   name: "HomePage",
   components: {
-    WeatherForecastCard
+    Navbar,
+    WeatherForecastCard,
+    SearchWeatherInput
+  },
+  watch: {
+    errorForecast(err) {
+      this.$toast.error("Error fetching forecast... Try again later");
+    }
+  },
+  computed: {
+    ...mapGetters(["forecast", "loadingForecast", "errorForecast"])
   }
 };
 </script>
@@ -19,5 +52,14 @@ export default {
 .HomePage {
   max-width: 900px;
   margin: 0 auto;
+}
+
+.HomePage__SearchInputContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.HomePage__SearchInput {
+  max-width: 90%;
 }
 </style>

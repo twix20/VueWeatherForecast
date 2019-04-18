@@ -1,15 +1,12 @@
 <template>
   <b-card class="WeatherForecastCard__Root">
-    <!-- <div class="bg-secondary text-light">
-      This is some content within the default
-      <samp>&lt;b-card-body&gt;</samp> block of the
-      <samp>&lt;b-card&gt;</samp> component. Notice the padding between the card's border and this
-      gray
-      <samp>&lt;div&gt;</samp>.
-    </div>-->
     <b-card-title class="WeatherForecastCard__Title">5 day forecast</b-card-title>
 
-    <b-container fluid>
+    <div v-if="loadingForecast" class="text-center">
+      <b-spinner variant="primary" type="grow" label="Spinning"></b-spinner>
+    </div>
+
+    <b-container v-else fluid>
       <b-row align-h="start" class="mb-2">
         <b-col
           order="1"
@@ -18,32 +15,47 @@
           sm="4"
           class="WeatherForecastCard__Col WeatherForecastCard__LocationContainer"
         >
-          <div class="WeatherForecastCard__Date">25.10.2019</div>
-          <div class="WeatherForecastCard__Location">Berlin AAaaaaa</div>
-          <div class="WeatherForecastCard__Temperature">25.1 &#8451;</div>
+          <div class="WeatherForecastCard__Date">{{formatDate(currentDayForecast.date)}}</div>
+          <div class="WeatherForecastCard__Location">{{forecast.city}}</div>
+          <div
+            class="WeatherForecastCard__Temperature"
+          >{{currentDayForecast.averageTemperature}} &#8451;</div>
         </b-col>
-        <b-col class="WeatherForecastCard__Col" order="3" order-sm="2" cols="12" sm="4">
-          <CloudImg/>
+        <b-col
+          class="WeatherForecastCard__Col align-items-center"
+          order="3"
+          order-sm="2"
+          cols="12"
+          sm="4"
+        >
+          <CloudImg
+            class="WeatherForecastCard__MainImg"
+            :alt="currentDayForecast.date"
+            :temperature="currentDayForecast.averageTemperature"
+            :windSpeed="currentDayForecast.windSpeed"
+            :humidity="currentDayForecast.humidity"
+          />
         </b-col>
         <b-col class="WeatherForecastCard__Col" order="2" order-sm="3" cols="6" sm="4">
           <div class="WeatherForecastCard__Detail">
             <span class="WeatherForecastCard__DetailName">Humidity:</span>
-            <span class="WeatherForecastCard__DetailValue">63%</span>
+            <span class="WeatherForecastCard__DetailValue">{{currentDayForecast.humidity}}</span>
           </div>
           <div class="WeatherForecastCard__Detail">
             <span class="WeatherForecastCard__DetailName">Wind:</span>
-            <span class="WeatherForecastCard__DetailValue">23 KM/H</span>
+            <span class="WeatherForecastCard__DetailValue">{{currentDayForecast.windSpeed}}KM/H</span>
           </div>
         </b-col>
       </b-row>
-      <b-row align-h="start">
-        <WeatherDayList/>
+      <b-row align-h="center">
+        <WeatherDayList :days="forecast.days.slice(1)"/>
       </b-row>
     </b-container>
   </b-card>
 </template>
 
 <script>
+import moment from "moment";
 import WeatherDayList from "./WeatherDayList";
 import CloudImg from "../CloudImg";
 
@@ -54,7 +66,18 @@ export default {
     CloudImg
   },
   props: {
-    // msg: String
+    forecast: Object,
+    loadingForecast: Boolean
+  },
+  computed: {
+    currentDayForecast() {
+      return this.forecast.days[0];
+    }
+  },
+  methods: {
+    formatDate(date) {
+      return moment(date).format("DD.MM.YYYY");
+    }
   }
 };
 </script>
@@ -72,6 +95,9 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+.WeatherForecastCard__MainImg {
+  max-width: 80%;
 }
 .WeatherForecastCard__LocationContainer {
   font-weight: bold;

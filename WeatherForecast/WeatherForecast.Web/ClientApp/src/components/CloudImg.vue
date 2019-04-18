@@ -12,7 +12,7 @@ export default {
   },
   computed: {
     src: function() {
-      if (this.temperature > 40) return require("@/assets/sunny.png");
+      if (this.temperature > 25) return require("@/assets/sunny.png");
       if (this.windSpeed > 2) return require("@/assets/windy.png");
 
       return require("@/assets/rainy.png");

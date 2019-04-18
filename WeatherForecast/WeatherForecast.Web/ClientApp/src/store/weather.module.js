@@ -1,22 +1,35 @@
+import { kelvinsToCelcius } from "@/common/utils";
 import { WeatherApi } from "@/common/services/api";
 
-import { FETCH_WEATHER_FORECAST, WEATHER_HISTORY_ADD } from "./actions.type";
-import { SET_WEATHER_FORECAST, HISTORY_ADD } from "./mutations.type";
+import {
+  FETCH_WEATHER_FORECAST_ASYNC,
+  WEATHER_HISTORY_ADD
+} from "./actions.type";
+import { FETCH_WEATHER_FORECAST, HISTORY_ADD } from "./mutations.type";
 
 const initialState = {
-  forecast: [],
+  [FETCH_WEATHER_FORECAST.loadingKey]: false,
+  [FETCH_WEATHER_FORECAST.errorKey]: null,
+  forecast: null,
   history: []
 };
 
 export const state = { ...initialState };
 
 export const actions = {
-  async [FETCH_WEATHER_FORECAST](context, { city, zipCode }) {
-    debugger;
-    const { data } = await WeatherApi.getForecast(city, zipCode);
+  async [FETCH_WEATHER_FORECAST_ASYNC](context, { city, zipCode }) {
+    context.commit(FETCH_WEATHER_FORECAST.START);
 
-    context.commit(SET_WEATHER_FORECAST, data.article);
-    return data;
+    try {
+      const {
+        data: { days }
+      } = await WeatherApi.getForecast(city, zipCode);
+
+      context.commit(FETCH_WEATHER_FORECAST.SUCCESS, { city, days });
+      return days;
+    } catch (error) {
+      context.commit(FETCH_WEATHER_FORECAST.FAILURE, error);
+    }
   },
   [WEATHER_HISTORY_ADD](context, payload) {
     context.commit(HISTORY_ADD, payload);
@@ -26,10 +39,30 @@ export const actions = {
 export const mutations = {
   [HISTORY_ADD](state, payload) {
     state.history = [...state.history, payload];
+  },
+  [FETCH_WEATHER_FORECAST.START](state) {
+    state[FETCH_WEATHER_FORECAST.loadingKey] = true;
+  },
+  [FETCH_WEATHER_FORECAST.FAILURE](state, error) {
+    state[FETCH_WEATHER_FORECAST.loadingKey] = false;
+    state[FETCH_WEATHER_FORECAST.errorKey] = error;
+  },
+  [FETCH_WEATHER_FORECAST.SUCCESS](state, payload) {
+    state[FETCH_WEATHER_FORECAST.loadingKey] = false;
+    state.forecast = {
+      ...payload,
+      days: payload.days.map(d => ({
+        ...d,
+        averageTemperature: kelvinsToCelcius(d.averageTemperature).toFixed(2),
+        windSpeed: d.windSpeed.toFixed(2)
+      }))
+    };
   }
 };
 
 const getters = {
+  errorForecast: state => state[FETCH_WEATHER_FORECAST.errorKey],
+  loadingForecast: state => state[FETCH_WEATHER_FORECAST.loadingKey],
   forecast: state => state.forecast,
   history: state => state.history
 };

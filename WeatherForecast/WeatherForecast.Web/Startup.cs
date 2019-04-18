@@ -51,6 +51,15 @@ namespace WeatherForecast.Web
                 c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
             });
 
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(c => c
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin()
+                );
+            });
+
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.RegisterServices();
@@ -81,6 +90,8 @@ namespace WeatherForecast.Web
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseCors();
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
