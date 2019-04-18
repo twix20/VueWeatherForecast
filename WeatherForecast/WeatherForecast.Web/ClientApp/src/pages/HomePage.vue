@@ -38,7 +38,7 @@ export default {
     SearchWeatherInput
   },
   watch: {
-    errorForecast(err) {
+    errorForecast() {
       this.$toast.error("Error fetching forecast... Try again later");
     }
   },

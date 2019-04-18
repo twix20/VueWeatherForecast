@@ -11,6 +11,7 @@ export const search = ({ city, zipCode }) =>
   instance.get("/search", {
     params: {
       city,
-      postalcode: zipCode
+      postalcode: zipCode,
+      addressdetails: 1
     }
   });

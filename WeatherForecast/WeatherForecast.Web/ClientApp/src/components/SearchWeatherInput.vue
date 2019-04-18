@@ -102,10 +102,12 @@ export default {
       }
 
       OpenStreetmapApi.search({ city, zipCode }).then(response => {
-        this.cities = response.data.map(r => ({
-          displayName: r.display_name,
-          city: r.display_name.split(",")[0]
-        }));
+        this.cities = response.data
+          .filter(r => r.address.city)
+          .map(r => ({
+            displayName: r.display_name,
+            city: r.address.city
+          }));
         this.isLoading = false;
       });
     }

@@ -9,4 +9,4 @@
 **/.toolstarget
 
 */node_modules
-*/build
+*/dist
