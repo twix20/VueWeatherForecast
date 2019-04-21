@@ -40,8 +40,11 @@
 
 <script>
 import debounce from "lodash/debounce";
-
-import { FETCH_WEATHER_FORECAST_ASYNC } from "../store/actions.type";
+import moment from "moment";
+import {
+  FETCH_WEATHER_FORECAST_ASYNC,
+  WEATHER_HISTORY_ADD
+} from "../store/actions.type";
 import { OpenStreetmapApi } from "@/common/services/api";
 
 export default {
@@ -82,6 +85,12 @@ export default {
       this.$store.dispatch(FETCH_WEATHER_FORECAST_ASYNC, {
         city,
         type
+      });
+
+      this.$store.dispatch(WEATHER_HISTORY_ADD, {
+        date: moment(),
+        type,
+        value: city
       });
     },
     toggleSearchType() {

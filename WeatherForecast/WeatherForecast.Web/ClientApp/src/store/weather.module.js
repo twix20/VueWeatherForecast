@@ -7,11 +7,15 @@ import {
 } from "./actions.type";
 import { FETCH_WEATHER_FORECAST, HISTORY_ADD } from "./mutations.type";
 
+const historyLocalStorageKey = "history";
+
 const initialState = {
   [FETCH_WEATHER_FORECAST.loadingKey]: false,
   [FETCH_WEATHER_FORECAST.errorKey]: null,
   forecast: null,
-  history: []
+  history: JSON.parse(
+    window.localStorage.getItem(historyLocalStorageKey) || "[]"
+  )
 };
 
 export const state = { ...initialState };
@@ -39,6 +43,10 @@ export const actions = {
 export const mutations = {
   [HISTORY_ADD](state, payload) {
     state.history = [...state.history, payload];
+    window.localStorage.setItem(
+      historyLocalStorageKey,
+      JSON.stringify(state.history)
+    );
   },
   [FETCH_WEATHER_FORECAST.START](state) {
     state[FETCH_WEATHER_FORECAST.loadingKey] = true;
