@@ -1,9 +1,9 @@
 <template>
   <div>
     <Navbar/>
-    <div class="HomePage mt-2 mr-2 d-flex justify-content-between p-2">
-      <div class="HomePage__Content">
-        <b-container>
+    <b-container class="HomePage">
+      <b-row>
+        <b-col sm="12" md="9" class="HomePage__Content p-2">
           <div class="mb-2 HomePage__SearchInputContainer">
             <SearchWeatherInput class="HomePage__SearchInput"/>
           </div>
@@ -19,15 +19,12 @@
               lead="Start searching by using search engine above!"
             ></b-jumbotron>
           </div>
-        </b-container>
-      </div>
-      <div class="HomePage__RightSide d-none d-lg-block">
-        <SearchWeatherHistoryList :history="history"/>
-      </div>
-    </div>
-    <div class="d-lg-none m-2">
-      <SearchWeatherHistoryList :history="history"/>
-    </div>
+        </b-col>
+        <b-col sm="12" md="3" class="HomePage__RightSide p-2">
+          <SearchWeatherHistoryList :history="history"/>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -58,9 +55,9 @@ export default {
 </script>
 
 <style>
-.HomePage {
-  /* max-width: 900px;
-  margin: 0 auto; */
+.HomePage__RightSide {
+  height: calc(100vh - 70px);
+  overflow-y: auto;
 }
 
 .HomePage__Content {
