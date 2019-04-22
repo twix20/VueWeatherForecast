@@ -49,7 +49,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["forecast", "loadingForecast", "errorForecast", "history"])
+    ...mapGetters(["forecast", "loadingForecast", "errorForecast"]),
+    history() {
+      return this.$store.getters.history.slice().sort(function(a, b) {
+        return new Date(b.date) - new Date(a.date);
+      });
+    }
   }
 };
 </script>
